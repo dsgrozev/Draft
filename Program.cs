@@ -23,7 +23,7 @@ namespace DraftSystem
             // Read Teams
             Team.ReadExcel(xlWorkBook);
             xlWorkBook.Close();
-            Console.Write("");
+
 
             // For each team summarize offensive record
             // For each tema summarize defensive record
@@ -32,6 +32,7 @@ namespace DraftSystem
                 t.SummarizeRecord(true);
                 t.SummarizeRecord(false);
             }
+            Console.Write("");            
             
             // Find average def values
             // Find average offensive coef

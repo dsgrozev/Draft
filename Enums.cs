@@ -1,5 +1,19 @@
-﻿namespace DraftSystem
+﻿using System.Reflection;
+
+namespace DraftSystem
 {
+    internal static class Ext
+    {
+        public static int GetMetricValue(this object record, Metric metric)
+        {
+            FieldInfo p = record.GetType().GetField(metric.ToString());
+            if (p == null)
+            {
+                return 0;
+            }
+            return (int)p.GetValue(record);
+        }
+    }
     enum Position
     {
         QB,

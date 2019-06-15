@@ -60,15 +60,15 @@ namespace DraftSystem
                     int sum = 0;
                     foreach (var rec in recsOff)
                     {
-                        sum += OffensiveRecord.GetMetricValue(rec, m.ToString());
+                        sum += Ext.GetMetricValue(rec, m);
                     }
                     foreach (var rec in recsDef)
                     {
-                        sum += OffensiveRecord.GetMetricValue(rec, m.ToString());
+                        sum += Ext.GetMetricValue(rec, m);
                     }
                     foreach (var rec in recsKick)
                     {
-                        sum += OffensiveRecord.GetMetricValue(rec, m.ToString());
+                        sum += Ext.GetMetricValue(rec, m);
                     }
                     weekRecord.Add(m, sum);
                 }

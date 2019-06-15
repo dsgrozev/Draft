@@ -12,17 +12,17 @@ namespace DraftSystem
         internal string Team;
         internal string VsTeam;
         internal int WeekNumber;
-        internal int PassYds;
-        internal int PassTd;
-        internal int PassInt;
-        internal int RushYds;
-        internal int RushTd;
-        internal int Rec;
-        internal int RecYds;
-        internal int RecTd;
-        internal int RetTd;
-        internal int TwoPt;
-        internal int FumLost;
+        public int PassYds;
+        public int PassTd;
+        public int PassInt;
+        public int RushYds;
+        public int RushTd;
+        public int Rec;
+        public int RecYds;
+        public int RecTd;
+        public int RetTd;
+        public int TwoPt;
+        public int FumLost;
 
         public OffensiveRecord(
             string playerName,
@@ -86,11 +86,6 @@ namespace DraftSystem
                     Convert.ToInt32(range[i, j++])
                 ));
             }
-        }
-
-        public static int GetMetricValue(this object offensiveRecord, string metric)
-        {
-            return (int)offensiveRecord.GetType().GetProperty(metric).GetValue(offensiveRecord);
         }
     }
 }

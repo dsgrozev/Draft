@@ -11,12 +11,12 @@ namespace DraftSystem
         internal string Team;
         internal string VsTeam;
         internal int WeekNumber;
-        internal int FG19;
-        internal int FG29;
-        internal int FG39;
-        internal int FG49;
-        internal int FG50;
-        internal int PAT;
+        public int FG19;
+        public int FG29;
+        public int FG39;
+        public int FG49;
+        public int FG50;
+        public int PAT;
 
         public KickerRecord(
             string playerName,
@@ -62,10 +62,6 @@ namespace DraftSystem
                     Convert.ToInt32(range[i, j++])
                 ));
             }
-        }
-        public static int GetMetricValue(this object kickerRecord, string metric)
-        {
-            return (int)kickerRecord.GetType().GetProperty(metric).GetValue(kickerRecord);
         }
     }
 }

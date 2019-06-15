@@ -11,14 +11,14 @@ namespace DraftSystem
         internal string Team;
         internal string VsTeam;
         internal int WeekNumber;
-        internal int PtsVs;
-        internal int Sack;
-        internal int DefInt;
-        internal int FumRec;
-        internal int DefTd;
-        internal int Safe;
-        internal int BlkKick;
-        internal int DefRetTd;
+        public int PtsVs;
+        public int Sack;
+        public int DefInt;
+        public int FumRec;
+        public int DefTd;
+        public int Safe;
+        public int BlkKick;
+        public int DefRetTd;
 
         public DefensiveRecord(
             string playerName,
@@ -70,11 +70,6 @@ namespace DraftSystem
                     Convert.ToInt32(range[i, j++])
                 ));
             }
-        }
-
-        public static int GetMetricValue(this object defensiveRecord, string metric)
-        {
-            return (int)defensiveRecord.GetType().GetProperty(metric).GetValue(defensiveRecord);
         }
     }
 }
