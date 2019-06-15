@@ -11,12 +11,12 @@ namespace DraftSystem
         internal string Team;
         internal string VsTeam;
         internal int WeekNumber;
-        internal int Fg19;
-        internal int Fg29;
-        internal int Fg39;
-        internal int Fg49;
-        internal int Fg50;
-        internal int Pat;
+        internal int FG19;
+        internal int FG29;
+        internal int FG39;
+        internal int FG49;
+        internal int FG50;
+        internal int PAT;
 
         public KickerRecord(
             string playerName,
@@ -34,12 +34,12 @@ namespace DraftSystem
             Team = team ?? throw new ArgumentNullException(nameof(team));
             VsTeam = vsTeam ?? throw new ArgumentNullException(nameof(vsTeam));
             WeekNumber = weekNumber;
-            Fg19 = fg19;
-            Fg29 = fg29;
-            Fg39 = fg39;
-            Fg49 = fg49;
-            Fg50 = fg50;
-            Pat = pat;
+            FG19 = fg19;
+            FG29 = fg29;
+            FG39 = fg39;
+            FG49 = fg49;
+            FG50 = fg50;
+            PAT = pat;
         }
 
         internal static void ReadExcel(Workbook xlWorkBook)
@@ -62,6 +62,10 @@ namespace DraftSystem
                     Convert.ToInt32(range[i, j++])
                 ));
             }
+        }
+        public static int GetMetricValue(this object kickerRecord, string metric)
+        {
+            return (int)kickerRecord.GetType().GetProperty(metric).GetValue(kickerRecord);
         }
     }
 }

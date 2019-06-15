@@ -26,10 +26,15 @@ namespace DraftSystem
             Console.Write("");
 
             // For each team summarize offensive record
-
-
             // For each tema summarize defensive record
-
+            foreach (Team t in Team.Teams)
+            {
+                t.SummarizeRecord(true);
+                t.SummarizeRecord(false);
+            }
+            
+            // Find average def values
+            // Find average offensive coef
 
             // For each player summarize coeficients
             // For each team find pos / metric coeficients

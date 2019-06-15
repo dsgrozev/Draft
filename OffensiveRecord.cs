@@ -87,5 +87,10 @@ namespace DraftSystem
                 ));
             }
         }
+
+        public static int GetMetricValue(this object offensiveRecord, string metric)
+        {
+            return (int)offensiveRecord.GetType().GetProperty(metric).GetValue(offensiveRecord);
+        }
     }
 }
