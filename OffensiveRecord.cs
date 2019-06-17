@@ -13,14 +13,14 @@ namespace DraftSystem
         internal string VsTeam;
         internal int WeekNumber;
         public int PassYds;
-        public int PassTd;
+        public int PassTD;
         public int PassInt;
         public int RushYds;
-        public int RushTd;
+        public int RushTD;
         public int Rec;
         public int RecYds;
-        public int RecTd;
-        public int RetTd;
+        public int RecTD;
+        public int RetTD;
         public int TwoPt;
         public int FumLost;
 
@@ -48,14 +48,14 @@ namespace DraftSystem
             VsTeam = vsTeam ?? throw new ArgumentNullException(nameof(vsTeam));
             WeekNumber = weekNumber;
             PassYds = passYds;
-            PassTd = passTd;
+            PassTD = passTd;
             PassInt = passInt;
             RushYds = rushYds;
-            RushTd = rushTd;
+            RushTD = rushTd;
             Rec = rec;
             RecYds = recYds;
-            RecTd = recTd;
-            RetTd = retTd;
+            RecTD = recTd;
+            RetTD = retTd;
             TwoPt = twoPt;
             FumLost = fumLost;
         }

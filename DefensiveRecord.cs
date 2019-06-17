@@ -15,10 +15,10 @@ namespace DraftSystem
         public int Sack;
         public int DefInt;
         public int FumRec;
-        public int DefTd;
+        public int DefTD;
         public int Safe;
         public int BlkKick;
-        public int DefRetTd;
+        public int DefRetTD;
 
         public DefensiveRecord(
             string playerName,
@@ -42,10 +42,10 @@ namespace DraftSystem
             Sack = sack;
             DefInt = defInt;
             FumRec = fumRec;
-            DefTd = defTd;
+            DefTD = defTd;
             Safe = safe;
             BlkKick = blkKick;
-            DefRetTd = defRetTd;
+            DefRetTD = defRetTd;
         }
 
         internal static void ReadExcel(Workbook xlWorkBook)
