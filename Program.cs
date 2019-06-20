@@ -11,11 +11,11 @@ namespace DraftSystem
             Workbook xlWorkBook = xlApp.Workbooks
                 .Open(@"C:\Users\Dimitar\OneDrive\Documents\Copy of FantasyWeek1_14_2019.xlsx");
             // Read Defensive Data
-            DefensiveRecord.ReadExcel(xlWorkBook);
+            AllDefensiveRecords.ReadExcel(xlWorkBook);
             // Read Kicker Data
             KickerRecord.ReadExcel(xlWorkBook);
             // Read Offensive Data
-            OffensiveRecord.ReadExcel(xlWorkBook);
+            AllOffensiveRecordS.ReadExcel(xlWorkBook);
             // Read Schedule
             ScheduleRecord.ReadExcel(xlWorkBook);
             // Read Team Players
@@ -42,6 +42,20 @@ namespace DraftSystem
             {
                 t.OffenseSummary();
             }
+            // Calculate team counts 
+            foreach (Team t in Team.Teams)
+            {
+                t.PosCounts();
+            }
+            // For each team find pos / metric coeficients
+            foreach (Team t in Team.Teams)
+            {
+                t.CalculatePosCoef();
+            }
+            // For each player summarize coeficients
+            // For each team find team players expected coeficients
+            // For each player find expected points
+
 
             Console.Write("");
             xlApp = new Application();
@@ -54,10 +68,10 @@ namespace DraftSystem
                 offTable[i, 0] = t.Name;
                 defTable[i, 0] = t.Name;
                 int j = 1;
-                foreach(Metric m in Enum.GetValues(typeof(Metric)))
+                foreach (Metric m in Enum.GetValues(typeof(Metric)))
                 {
-                    offTable[i, j] = t.offensiveSummary[m].ToString();
-                    defTable[i, j++] = t.defensiveSummary[m].ToString();
+                    offTable[i, j] = t.OffensiveSummary[m].ToString();
+                    defTable[i, j++] = t.DefensiveSummary[m].ToString();
                 }
                 i++;
             }
@@ -69,13 +83,6 @@ namespace DraftSystem
             workSheet.UsedRange.Value = defTable;
             workSheet.SaveAs(Environment.GetFolderPath(Environment.SpecialFolder.Desktop) + @"\testNew.xlsx");
             xlApp.Quit();
-
-            // For each player summarize coeficients
-            // For each team find pos / metric coeficients
-            // Calculate team counts
-            // For each team find team players expected coeficients
-            // For each player find expected points
-
         }
     }
 }

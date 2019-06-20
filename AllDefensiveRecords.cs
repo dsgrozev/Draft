@@ -4,9 +4,9 @@ using System.Collections.Generic;
 
 namespace DraftSystem
 {
-    class DefensiveRecord
+    class AllDefensiveRecords
     {
-        static internal List<DefensiveRecord> Records = new List<DefensiveRecord>();
+        static internal List<AllDefensiveRecords> Records = new List<AllDefensiveRecords>();
         internal string PlayerName;
         internal string Team;
         internal string VsTeam;
@@ -20,7 +20,7 @@ namespace DraftSystem
         public int BlkKick;
         public int DefRetTD;
 
-        public DefensiveRecord(
+        public AllDefensiveRecords(
             string playerName,
             string team,
             string vsTeam,
@@ -55,7 +55,7 @@ namespace DraftSystem
             for (int i = 2; i <= range.GetUpperBound(0); i++)
             {
                 int j = 1;
-                Records.Add(new DefensiveRecord(
+                Records.Add(new AllDefensiveRecords(
                     (string)range[i, j++],
                     (string)range[i, j++],
                     (string)range[i, j++],
