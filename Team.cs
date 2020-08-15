@@ -20,6 +20,8 @@ namespace DraftSystem
         internal Dictionary<Position, int> PositionCounts = new Dictionary<Position, int>();
         internal Dictionary<Metric, Dictionary<Position, double>> MetricByPositionCoeficients = 
             new Dictionary<Metric, Dictionary<Position, double>>();
+        internal Dictionary<int, Team> Schedule = new Dictionary<int, Team>();
+        
         public Team(string name, string shortName)
         {
             Name = name;
@@ -36,19 +38,19 @@ namespace DraftSystem
             }
         }
 
-        internal Team FindTeamByName(string name) => Teams.Find(x => x.Name == name);
-        internal Team FindTeamByShortName(string shortName) => 
+        internal static Team FindTeamByName(string name) => Teams.Find(x => x.Name == name);
+        internal static Team FindTeamByShortName(string shortName) => 
             Teams.Find(x => x.ShortName == shortName);
 
         internal void SummarizeRecord(bool offensive)
         {
             Dictionary<int, Dictionary<Metric, int>> record =
                 offensive ? OffensiveRecord : DefensiveRecord;
-            for (int i = 1; i < AllOffensiveRecordS.Records.Select(x => x.WeekNumber).Max() + 1; i++)
+            for (int i = 1; i < AllOffensiveRecords.Records.Select(x => x.WeekNumber).Max() + 1; i++)
             {
                 Dictionary<Metric, int> weekRecord = new Dictionary<Metric, int>();
-                IEnumerable<AllOffensiveRecordS> recsOff = 
-                        AllOffensiveRecordS.Records.Where(x =>
+                IEnumerable<AllOffensiveRecords> recsOff = 
+                        AllOffensiveRecords.Records.Where(x =>
                         (offensive ? x.Team : x.VsTeam) == Name &&
                         x.WeekNumber == i);
                 IEnumerable<AllDefensiveRecords> recsDef =
@@ -84,9 +86,62 @@ namespace DraftSystem
             }
         }
 
+        internal void UpdateSchedule()
+        {
+            ScheduleRecord sr = ScheduleRecord.Records.First(x => x.Team == this.Name);
+            for (int i = 1; i < 17; i++)
+            {
+                string shortName = sr.GetOppByWeek(i);
+                if (shortName != "Bye")
+                {
+                    this.Schedule.Add(i, FindTeamByShortName(shortName));
+                }
+            }
+        }
+
+        internal void UpdatePlayerCoef()
+        {
+            foreach (Position p in Enum.GetValues(typeof(Position)))
+            {
+                var players = Player.AllPlayers.Where(x => x.Team == this && x.Position == p);
+                foreach (Metric m in Enum.GetValues(typeof(Metric)))
+                {
+                    double sumCoef = this.MetricByPositionCoeficients[m][p];
+                    double sumPlayers = players.Sum(x => x.isNew ? 0 : x.coef[m]);
+                    if (sumPlayers >= sumCoef)
+                    {
+                        foreach(Player pl in players)
+                        {
+                            pl.realCoef[m] = pl.isNew ? 0 : pl.coef[m]; 
+                        }
+                    }
+                    else
+                    {
+                        if (players.Any(x => x.isNew))
+                        {
+                            double add = (sumCoef - sumPlayers) / players.Count(x => x.isNew);
+                            foreach (Player pl in players)
+                            {
+                                pl.realCoef[m] = pl.isNew ? add : pl.coef[m];
+                            }
+                        }
+                        else
+                        {
+                            double add = (sumCoef - sumPlayers) / players.Count();
+                            foreach (Player pl in players)
+                            {
+                                pl.realCoef[m] = pl.coef[m] + add;
+                            }
+                        }
+
+                    }
+                }
+            }
+        }
+
         internal void PosCounts()
         {
-            IEnumerable<AllOffensiveRecordS> recsOff = AllOffensiveRecordS.Records.Where(x => x.Team == Name);
+            IEnumerable<AllOffensiveRecords> recsOff = AllOffensiveRecords.Records.Where(x => x.Team == Name);
             int weeks = AllDefensiveRecords.Records.Where(x => x.Team == Name).Count();
             foreach (Position p in Enum.GetValues(typeof(Position)))
             {
@@ -108,7 +163,36 @@ namespace DraftSystem
 
         internal void CalculatePosCoef()
         {
+            var allPlayers = AllOffensiveRecords.Records.Where(x => x.Team == Name);
+            foreach (Metric m in Enum.GetValues(typeof(Metric)))
+            {
+                foreach (Position pos in Enum.GetValues(typeof(Position)))
+                {
+                    List<double> values = new List<double>();
+                    for (int i = 1; i <= allPlayers.Max(x => x.WeekNumber); i++) 
+                    {
+                        if (!OffensiveRecord.ContainsKey(i))
+                        {
+                            continue;
+                        }
+                        double sum = 
+                            allPlayers.Where(x => x.WeekNumber == i && x.Position == pos.ToString()).Sum(x => x.GetMetricValue(m));
 
+                        if (OffensiveRecord[i][m] != 0)
+                        {
+                            values.Add(sum / OffensiveRecord[i][m]);
+                        }
+                        
+                    }
+                    double avg = FindWeightedAverage(values);
+
+                    if(!MetricByPositionCoeficients.ContainsKey(m))
+                    {
+                        MetricByPositionCoeficients.Add(m, new Dictionary<Position, double>());
+                    }
+                    MetricByPositionCoeficients[m].Add(pos, avg);
+                }
+            }
         }
 
         internal void DefenseSummary()
@@ -155,11 +239,15 @@ namespace DraftSystem
             }
         }
 
-        private double FindWeightedAverage(List<double> recs)
+        public static double FindWeightedAverage(List<double> recs)
         {
             double[] arr = recs.ToArray();
             int count = arr.Length;
             int divider = count;
+            if (count == 0)
+            {
+                return 0;
+            }
             double sum = arr.Sum();
 
             if (count > 4)
@@ -180,7 +268,7 @@ namespace DraftSystem
             return sum / divider;
         }
 
-        private double FindWeightedAverage(IEnumerable<int> recs)
+        public static double FindWeightedAverage(IEnumerable<int> recs)
         {
             int[] arr = recs.ToArray();
             int count = arr.Length;

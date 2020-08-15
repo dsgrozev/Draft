@@ -10,12 +10,14 @@ namespace DraftSystem
         internal string PlayerName;
         internal string Team;
         internal string Position;
+        internal int Suspension;
 
-        public TeamPlayersRecord(string playerName, string team, string position)
+        public TeamPlayersRecord(string playerName, string team, string position, int suspension)
         {
             PlayerName = playerName ?? throw new ArgumentNullException(nameof(playerName));
             Team = team ?? throw new ArgumentNullException(nameof(team));
             Position = position ?? throw new ArgumentNullException(nameof(position));
+            Suspension = suspension;
         }
 
         internal static void ReadExcel(Workbook xlWorkBook)
@@ -28,7 +30,8 @@ namespace DraftSystem
                 Records.Add(new TeamPlayersRecord(
                     (string)range[i, j++],
                     (string)range[i, j++],
-                    (string)range[i, j++]
+                    (string)range[i, j++],
+                    Convert.ToInt32(range[i, j++])
                 ));
             }
         }

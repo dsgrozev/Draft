@@ -9,13 +9,13 @@ namespace DraftSystem
         {
             Application xlApp = new Application();
             Workbook xlWorkBook = xlApp.Workbooks
-                .Open(@"C:\Users\Dimitar\OneDrive\Documents\Copy of FantasyWeek1_14_2019.xlsx");
+                .Open(@"C:\FF\Copy of FantasyWeek1_14_2019.xlsx");
             // Read Defensive Data
             AllDefensiveRecords.ReadExcel(xlWorkBook);
             // Read Kicker Data
             KickerRecord.ReadExcel(xlWorkBook);
             // Read Offensive Data
-            AllOffensiveRecordS.ReadExcel(xlWorkBook);
+            AllOffensiveRecords.ReadExcel(xlWorkBook);
             // Read Schedule
             ScheduleRecord.ReadExcel(xlWorkBook);
             // Read Team Players
@@ -53,35 +53,90 @@ namespace DraftSystem
                 t.CalculatePosCoef();
             }
             // For each player summarize coeficients
+            Player.Init();
+            foreach (Player p in Player.AllPlayers)
+            {
+                p.FindPrevCoef();
+            }
             // For each team find team players expected coeficients
+            foreach(Team t in Team.Teams)
+            {
+                t.UpdatePlayerCoef();
+            }
+            // For each team update schedule
+            foreach(Team t in Team.Teams)
+            {
+                t.UpdateSchedule();
+            }
             // For each player find expected points
+            foreach(Player p in Player.AllPlayers)
+            {
+                p.FindExpectedPoints();
+            }
 
-
-            Console.Write("");
             xlApp = new Application();
             xlApp.Workbooks.Add();
-            string[,] offTable = new string[33, 26];
-            string[,] defTable = new string[33, 26];
-            int i = 0;
-            foreach (Team t in Team.Teams)
+            _Worksheet workSheet = xlApp.ActiveSheet;
+            workSheet.Name = "Coeficients";
+
+            int col = 1;
+            workSheet.Cells[1, col++] = "Name";
+            workSheet.Cells[1, col++] = "Position";
+
+            foreach (string m in Enum.GetNames(typeof(Metric)))
             {
-                offTable[i, 0] = t.Name;
-                defTable[i, 0] = t.Name;
-                int j = 1;
+                workSheet.Cells[1, col++] = m;
+            }
+
+            col = 1;
+            int row = 2;
+            foreach (Player p in Player.AllPlayers)
+            {
+                workSheet.Cells[row, col++] = p.Name;
+                workSheet.Cells[row, col++] = p.Position.ToString();
                 foreach (Metric m in Enum.GetValues(typeof(Metric)))
                 {
-                    offTable[i, j] = t.OffensiveSummary[m].ToString();
-                    defTable[i, j++] = t.DefensiveSummary[m].ToString();
+                    workSheet.Cells[row, col++] = p.realCoef[m];
                 }
-                i++;
+                row++;
+                col = 1;
             }
-            _Worksheet workSheet = xlApp.ActiveSheet;
-            workSheet.Name = "testOff";
-            workSheet.UsedRange.Value = offTable;
+
             xlApp.Worksheets.Add();
-            workSheet.Name = "testDef";
-            workSheet.UsedRange.Value = defTable;
-            workSheet.SaveAs(Environment.GetFolderPath(Environment.SpecialFolder.Desktop) + @"\testNew.xlsx");
+            workSheet = xlApp.ActiveSheet;
+            workSheet.Name = "Weeks";
+
+            col = 1;
+            workSheet.Cells[1, col++] = "Name";
+            workSheet.Cells[1, col++] = "Position";
+
+            for (int i = 1; i < 17; i++)
+            {
+                workSheet.Cells[1, col++] = "Week " + i;
+            }
+
+            col = 1;
+            row = 2;
+            foreach (Player p in Player.AllPlayers)
+            {
+                workSheet.Cells[row, col++] = p.Name;
+                workSheet.Cells[row, col++] = p.Position.ToString();
+                for (int i = 1; i < 17; i++)
+                {
+                    if (p.expectedPoints.ContainsKey(i))
+                    {
+                        workSheet.Cells[row, col++] = p.expectedPoints[i];
+                    }
+                    else
+                    {
+                        workSheet.Cells[row, col++] = 0;
+                    }
+                }
+                row++;
+                col = 1;
+            }
+
+            workSheet.SaveAs(@"C:\FF\testNew.xlsx");
             xlApp.Quit();
         }
     }

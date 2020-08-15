@@ -7,10 +7,10 @@ namespace DraftSystem
     class AllDefensiveRecords
     {
         static internal List<AllDefensiveRecords> Records = new List<AllDefensiveRecords>();
-        internal string PlayerName;
-        internal string Team;
-        internal string VsTeam;
-        internal int WeekNumber;
+        public string PlayerName;
+        public string Team;
+        public string VsTeam;
+        public int WeekNumber;
         public int PtsVs;
         public int Sack;
         public int DefInt;

@@ -8,22 +8,22 @@ namespace DraftSystem
     {
         static internal List<ScheduleRecord> Records = new List<ScheduleRecord>();
         internal string Team;
-        internal string Week1;
-        internal string Week2;
-        internal string Week3;
-        internal string Week4;
-        internal string Week5;
-        internal string Week6;
-        internal string Week7;
-        internal string Week8;
-        internal string Week9;
-        internal string Week10;
-        internal string Week11;
-        internal string Week12;
-        internal string Week13;
-        internal string Week14;
-        internal string Week15;
-        internal string Week16;
+        public string Week1;
+        public string Week2;
+        public string Week3;
+        public string Week4;
+        public string Week5;
+        public string Week6;
+        public string Week7;
+        public string Week8;
+        public string Week9;
+        public string Week10;
+        public string Week11;
+        public string Week12;
+        public string Week13;
+        public string Week14;
+        public string Week15;
+        public string Week16;
 
         public ScheduleRecord(
             string team,
@@ -90,6 +90,11 @@ namespace DraftSystem
                     (string)range[i, j++]
                 ));
             }
+        }
+
+        internal string GetOppByWeek(int week)
+        {
+            return this.GetType().GetField("Week" + week).GetValue(this).ToString();
         }
     }
 }

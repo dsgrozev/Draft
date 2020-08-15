@@ -4,14 +4,14 @@ using System.Collections.Generic;
 
 namespace DraftSystem
 {
-    class AllOffensiveRecordS
+    class AllOffensiveRecords
     {
-        static internal List<AllOffensiveRecordS> Records = new List<AllOffensiveRecordS>();
-        internal string PlayerName;
-        internal string Position;
-        internal string Team;
-        internal string VsTeam;
-        internal int WeekNumber;
+        static internal List<AllOffensiveRecords> Records = new List<AllOffensiveRecords>();
+        public string PlayerName;
+        public string Position;
+        public string Team;
+        public string VsTeam;
+        public int WeekNumber;
         public int PassYds;
         public int PassTD;
         public int PassInt;
@@ -24,7 +24,7 @@ namespace DraftSystem
         public int TwoPt;
         public int FumLost;
 
-        public AllOffensiveRecordS(
+        public AllOffensiveRecords(
             string playerName,
             string position,
             string team,
@@ -67,7 +67,7 @@ namespace DraftSystem
             for (int i = 2; i <= range.GetUpperBound(0); i++)
             {
                 int j = 1;
-                Records.Add(new AllOffensiveRecordS(
+                Records.Add(new AllOffensiveRecords(
                     (string)range[i, j++],
                     (string)range[i, j++],
                     (string)range[i, j++],

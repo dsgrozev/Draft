@@ -7,10 +7,10 @@ namespace DraftSystem
     class KickerRecord
     {
         static internal List<KickerRecord> Records = new List<KickerRecord>();
-        internal string PlayerName;
-        internal string Team;
-        internal string VsTeam;
-        internal int WeekNumber;
+        public string PlayerName;
+        public string Team;
+        public string VsTeam;
+        public int WeekNumber;
         public int FG19;
         public int FG29;
         public int FG39;
