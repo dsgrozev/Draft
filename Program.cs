@@ -9,7 +9,7 @@ namespace DraftSystem
         {
             Application xlApp = new Application();
             Workbook xlWorkBook = xlApp.Workbooks
-                .Open(@"C:\FF\Copy of FantasyWeek1_14_2019.xlsx");
+                .Open(@"C:\FF\211439_1_19_2020_copy.xlsx");
             // Read Defensive Data
             AllDefensiveRecords.ReadExcel(xlWorkBook);
             // Read Kicker Data
@@ -109,6 +109,10 @@ namespace DraftSystem
             col = 1;
             workSheet.Cells[1, col++] = "Name";
             workSheet.Cells[1, col++] = "Position";
+            workSheet.Cells[1, col++] = "Team";
+            workSheet.Cells[1, col++] = "Drafted";
+            workSheet.Cells[1, col++] = "ADP";
+            workSheet.Cells[1, col++] = "Tier";
 
             for (int i = 1; i < 17; i++)
             {
@@ -121,6 +125,8 @@ namespace DraftSystem
             {
                 workSheet.Cells[row, col++] = p.Name;
                 workSheet.Cells[row, col++] = p.Position.ToString();
+                workSheet.Cells[row, col++] = p.Team.ShortName;
+                col += 3;
                 for (int i = 1; i < 17; i++)
                 {
                     if (p.expectedPoints.ContainsKey(i))

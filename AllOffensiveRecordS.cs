@@ -62,7 +62,7 @@ namespace DraftSystem
 
         internal static void ReadExcel(Workbook xlWorkBook)
         {
-            _Worksheet sheet = xlWorkBook.Sheets["Offense Data"];
+            _Worksheet sheet = xlWorkBook.Sheets["Offence Data"];
             object[,] range = sheet.UsedRange.Value;
             for (int i = 2; i <= range.GetUpperBound(0); i++)
             {

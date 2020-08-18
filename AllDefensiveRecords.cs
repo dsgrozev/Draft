@@ -50,7 +50,7 @@ namespace DraftSystem
 
         internal static void ReadExcel(Workbook xlWorkBook)
         {
-            _Worksheet sheet = xlWorkBook.Sheets["Defense Data"];
+            _Worksheet sheet = xlWorkBook.Sheets["Defence Data"];
             object[,] range = sheet.UsedRange.Value;
             for (int i = 2; i <= range.GetUpperBound(0); i++)
             {
